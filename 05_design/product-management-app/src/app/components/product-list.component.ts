@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { AsyncPipe, NgFor } from '@angular/common';
 import { Dialog } from '@angular/cdk/dialog';
-import { Observable, BehaviorSubject, switchMap } from 'rxjs';
 import { ProductService } from '../services/product.service';
+import { CartService } from '../services/cart.service';
 import { ProductCardComponent } from './product-card.component';
 import { NewProductDialogComponent } from './new-product-dialog.component';
 import { EditProductDialogComponent } from './edit-product-dialog.component';
@@ -13,23 +13,29 @@ import { Product, CreateProductDTO, UpdateProductDTO } from '../models/product.i
 @Component({
   standalone: true,
   selector: 'app-product-list',
-  imports: [AsyncPipe, ProductCardComponent],
+  imports: [AsyncPipe, ProductCardComponent, NgFor],
   templateUrl: './product-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductListComponent implements OnInit {
-  private refresh$ = new BehaviorSubject<void>(undefined);
-  products$ = this.refresh$.pipe(
-    switchMap(() => this._productService.getProducts())
-  );
+  products: Product[] = [];
 
   constructor(
     private _productService: ProductService,
-    private _dialog: Dialog
+    private _cartService: CartService,
+    private _dialog: Dialog,
+    private _cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    // Initial load is handled by refresh$ BehaviorSubject
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    this._productService.getProducts().subscribe(products => {
+      this.products = products;
+      this._cdr.markForCheck();
+    });
   }
 
   onSearch(event: Event): void {
@@ -42,7 +48,7 @@ export class ProductListComponent implements OnInit {
     dialogRef.closed.subscribe(result => {
       if (result) {
         this._productService.createProduct(result).subscribe(() => {
-          this.refresh$.next();
+          this.loadProducts();
         });
       }
     });
@@ -62,7 +68,7 @@ export class ProductListComponent implements OnInit {
     dialogRef.closed.subscribe(result => {
       if (result) {
         this._productService.updateProduct(result.id, result).subscribe(() => {
-          this.refresh$.next();
+          this.loadProducts();
         });
       }
     });
@@ -76,9 +82,17 @@ export class ProductListComponent implements OnInit {
     dialogRef.closed.subscribe(confirmed => {
       if (confirmed) {
         this._productService.deleteProduct(product.id).subscribe(() => {
-          this.refresh$.next();
+          this.loadProducts();
         });
       }
     });
+  }
+
+  onAddToCart(product: Product): void {
+    if (product.stock > 0) {
+      this._cartService.addToCart({ product_id: product.id, quantity: 1 });
+      product.stock -= 1;
+      this._cdr.markForCheck();
+    }
   }
 }

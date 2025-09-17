@@ -1,4 +1,4 @@
-<div class="bg-white border border-gray-100 rounded-xl p-8 transition-shadow hover:shadow-md h-[280px] flex flex-col">
+<div class="bg-white border border-gray-100 rounded-xl p-8 transition-shadow hover:shadow-md flex flex-col w-[410px]">
   <!-- Title -->
   <h4 class="text-lg font-medium text-[#030213] leading-tight mb-4">{{ product.name }}</h4>
 
@@ -23,7 +23,7 @@
   <!-- Actions -->
   <div class="flex gap-3">
     <button (click)="view.emit(product)"
-            class="flex items-center h-9 px-4 text-sm font-medium text-[#030213] bg-white border border-gray-100 rounded-lg transition-all duration-200 hover:bg-gray-50 active:scale-95">
+            class="flex items-center h-10 px-4 text-sm font-medium text-[#030213] bg-white border border-gray-100 rounded-lg transition-all duration-200 hover:bg-gray-50 active:scale-95">
       <span>View</span>
       <svg class="w-4 h-4 ml-2 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -32,7 +32,7 @@
     </button>
 
     <button (click)="edit.emit(product)"
-            class="flex items-center h-9 px-4 text-sm font-medium text-[#030213] bg-white border border-gray-100 rounded-lg transition-all duration-200 hover:bg-gray-50 active:scale-95">
+            class="flex items-center h-10 px-4 text-sm font-medium text-[#030213] bg-white border border-gray-100 rounded-lg transition-all duration-200 hover:bg-gray-50 active:scale-95">
       <span>Edit</span>
       <svg class="w-4 h-4 ml-2 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
@@ -40,12 +40,18 @@
       </svg>
     </button>
 
+    <button (click)="addToCart.emit(product)"
+            class="flex items-center h-10 px-4 text-sm font-medium text-white bg-blue-600 rounded-lg transition-all duration-200 hover:bg-opacity-90 active:scale-95">
+      <span>Add</span>
+    </button>
+
     <button (click)="delete.emit(product)"
-            class="flex items-center justify-center h-9 w-9 text-sm font-medium text-white bg-[#D4183D] rounded-lg transition-all duration-200 hover:bg-opacity-90 active:scale-95 ml-auto">
-      <svg class="w-4 h-4 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            class="flex items-center h-10 px-4 text-sm font-medium text-white bg-[#D4183D] rounded-lg transition-all duration-200 hover:bg-opacity-90 active:scale-95">
+      <span>Delete</span>
+      <svg class="w-4 h-4 ml-2 stroke-[1.5]" viewBox="0 0 24 24" fill="none" stroke="currentColor">
         <path d="M3 6h18"/>
         <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
       </svg>
     </button>
   </div>
-</div>322491
+</div>
