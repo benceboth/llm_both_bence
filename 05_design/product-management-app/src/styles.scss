@@ -1,0 +1,37 @@
+@use "tailwindcss";
+
+/* Set default background color */
+body {
+  @apply bg-[#F8F8F9];
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#F3F3F5];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#D1D1D6] rounded-full;
+}
+
+/* Input focus styles */
+input:focus, textarea:focus {
+  @apply outline-none ring-2 ring-blue-500/20;
+}
+
+/* Button hover effects */
+button {
+  @apply transition-all duration-200;
+  
+  &:hover {
+    @apply opacity-90;
+  }
+  
+  &:active {
+    @apply transform scale-95;
+  }
+}
