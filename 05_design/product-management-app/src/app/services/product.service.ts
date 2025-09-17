@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Product, CreateProductDTO, UpdateProductDTO } from '../models/product.interface';
+import { Product, CreateProductDTO, UpdateProductDTO, CartItem, AddToCartDTO } from '../models/product.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +29,21 @@ export class ProductService {
 
   deleteProduct(id: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/products/${id}`);
+  }
+
+  getCartItems(): Observable<CartItem[]> {
+    return this.http.get<CartItem[]>(`${this.apiUrl}/cart/items`);
+  }
+
+  addToCart(item: AddToCartDTO): Observable<CartItem> {
+    return this.http.post<CartItem>(`${this.apiUrl}/cart/items`, item);
+  }
+
+  removeFromCart(id: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/cart/items/${id}`);
+  }
+
+  updateCartItem(id: number, quantity: number): Observable<CartItem> {
+    return this.http.put<CartItem>(`${this.apiUrl}/cart/items/${id}?quantity=${quantity}`, {});
   }
 }
